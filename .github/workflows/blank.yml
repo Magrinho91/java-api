@@ -23,7 +23,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v2
 
       # ENV Variables
       - name: Configure AWS credentials
@@ -38,7 +38,7 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
 
       # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - name: Build & push the Docker image
         env: 
           DB_PASSWORD: ${{secrets.DB_PASSWORD}}
           DB_USERNAME: ${{secrets.DB_USERNAME}}
@@ -46,7 +46,7 @@ jobs:
           DB_NAME: ${{secrets.DB_NAME}}
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }} ECR_REPOSITORY: 
           ECR_REPOSITORY: employee_demo
-          IMAGE_TAG: teamX-api
+          IMAGE_TAG: team1-api
       
         run: |
           docker build --build-arg DB_PASSWORD=${DB_PASSWORD} 
@@ -54,4 +54,4 @@ jobs:
           --build-arg DB_HOST=${DB_HOST} 
           --build-arg DB_NAME=${DB_NAME} -t 
           $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG . 
-          
+    
